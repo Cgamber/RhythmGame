@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GuitarHero : MonoBehaviour
+public class Notes : MonoBehaviour
 {
     public Transform notesContainer;
     public GameObject notePrefab;
@@ -53,10 +53,9 @@ public class GuitarHero : MonoBehaviour
     }
 }
 
-This code creates a GuitarHero script that handles spawning and moving notes down the screen. It assumes that you have a notesContainer object in your scene that holds all of the notes. You can create this object by adding an empty GameObject to your scene and then attaching the GuitarHero script to it.
+This code creates a note script that handles spawning and moving notes down the screen. It assumes that you have a notesContainer object in your scene that holds all of the notes. You can create this object by adding an empty GameObject to your scene and then attaching the  script to it.
 
 The notePrefab variable should be set to a prefab of a note object that you create. The note object should have a collider attached to it that can detect when the player hits it with a key press. You can also add additional properties to the note object (such as different colors or animations) to make the game more interesting.
 
 In the Update method, the script spawns new notes at regular intervals (controlled by the noteInterval variable) and moves all of the existing notes down the screen. If a note reaches the bottom of the screen, it is destroyed.
 
-You can customize this script to add more features to your game, such as detecting key presses and checking if the player hits the notes correctly.
