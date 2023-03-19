@@ -1,0 +1,78 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MusicRhythmGame : MonoBehaviour
+{
+    public AudioSource music;
+    public GameObject notePrefab;
+    public Transform noteContainer;
+    public float speed = 5f;
+    public float timeOffset = 1f;
+    public float hitWindow = 0.2f;
+
+    private List<GameObject> notes;
+    private List<float> noteTimes;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        notes = new List<GameObject>();
+        noteTimes = new List<float>();
+
+        // Load music and calculate note times
+        float clipLength = music.clip.length;
+        float interval = clipLength / 8f;
+        for (int i = 0; i < 8; i++)
+        {
+            float noteTime = interval * i + timeOffset;
+            noteTimes.Add(noteTime);
+        }
+
+        // Spawn notes
+        foreach (float noteTime in noteTimes)
+        {
+            GameObject note = Instantiate(notePrefab, noteContainer);
+            note.transform.localPosition = new Vector3(0f, 0f, noteTime * speed);
+            notes.Add(note);
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // Check if player hits notes
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            foreach (GameObject note in notes)
+            {
+                float noteTime = note.transform.localPosition.z / speed;
+                if (Mathf.Abs(noteTime - music.time) < hitWindow)
+                {
+                    Destroy(note);
+                }
+            }
+        }
+
+        // Move notes down the screen
+        foreach (GameObject note in notes)
+        {
+            note.transform.localPosition -= new Vector3(0f, 0f, speed * Time.deltaTime);
+
+            // Check if note is missed
+            float noteTime = note.transform.localPosition.z / speed;
+            if (noteTime < music.time - hitWindow)
+            {
+                Destroy(note);
+            }
+        }
+    }
+}
+
+This code creates a MusicRhythmGame script that handles spawning and moving notes down the screen, as well as detecting if the player hits the notes at the right time. It assumes that you have an AudioSource component attached to a GameObject in your scene that plays the music.
+
+In the Start method, the script calculates the times when notes should appear and then spawns them at the appropriate positions in the noteContainer object. The speed variable controls how fast the notes move down the screen, while the timeOffset variable controls when the first note should appear (in seconds).
+
+In the Update method, the script checks if the player has hit any notes by pressing the spacebar. If the player hits a note within the hitWindow time window (in seconds), the note is destroyed. The script also moves all notes down the screen and destroys them if they are missed (i.e., their time has passed by more than the hitWindow time window).
+
+You can customize this script to add more features to your game, such as scoring and combo systems, different types of notes, and animations for hitting notes correctly or missing them.
