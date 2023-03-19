@@ -1,0 +1,62 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GuitarHero : MonoBehaviour
+{
+    public Transform notesContainer;
+    public GameObject notePrefab;
+    public float noteSpeed = 10f;
+
+    private List<Transform> notes;
+    private float spawnTime = 0f;
+    private float noteInterval = 1f;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        notes = new List<Transform>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // Spawn new notes at regular intervals
+        if (Time.time - spawnTime > noteInterval)
+        {
+            SpawnNote();
+            spawnTime = Time.time;
+        }
+
+        // Move all notes down the screen
+        foreach (Transform note in notes)
+        {
+            note.position -= new Vector3(0f, noteSpeed * Time.deltaTime, 0f);
+
+            // Check if the note has reached the bottom of the screen
+            if (note.position.y < -5f)
+            {
+                Destroy(note.gameObject);
+            }
+        }
+    }
+
+    void SpawnNote()
+    {
+        // Instantiate a new note prefab
+        GameObject newNote = Instantiate(notePrefab, notesContainer);
+        notes.Add(newNote.transform);
+
+        // Set the note's position and rotation
+        newNote.transform.position = new Vector3(Random.Range(-2f, 2f), 6f, 0f);
+        newNote.transform.rotation = Quaternion.Euler(0f, 0f, Random.Range(-45f, 45f));
+    }
+}
+
+This code creates a GuitarHero script that handles spawning and moving notes down the screen. It assumes that you have a notesContainer object in your scene that holds all of the notes. You can create this object by adding an empty GameObject to your scene and then attaching the GuitarHero script to it.
+
+The notePrefab variable should be set to a prefab of a note object that you create. The note object should have a collider attached to it that can detect when the player hits it with a key press. You can also add additional properties to the note object (such as different colors or animations) to make the game more interesting.
+
+In the Update method, the script spawns new notes at regular intervals (controlled by the noteInterval variable) and moves all of the existing notes down the screen. If a note reaches the bottom of the screen, it is destroyed.
+
+You can customize this script to add more features to your game, such as detecting key presses and checking if the player hits the notes correctly.
